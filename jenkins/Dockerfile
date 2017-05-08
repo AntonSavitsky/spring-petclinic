@@ -9,12 +9,12 @@ USER root
 #  we don't need native stuff).
 RUN apk update && apk add libstdc++ && rm -rf /var/cache/apk/*
 
-
 USER jenkins
-
-# Install Jenkins plugins
+# List of Jenkins plugins
 COPY plugins.txt /usr/share/jenkins/plugins.txt
-RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
-# Add Jenkins configuration
+# Copy all needed scripts
 COPY createSeedJob.groovy /usr/share/jenkins/ref/init.groovy.d/
 COPY pipeline.groovy /var/jenkins_home/
+# Install plugins from provided list
+RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
+
